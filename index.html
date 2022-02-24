@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let words = ["Rock", "Paper", "Scissors"];
+        let playerWin = 0;
+        let computerWin = 0;
+
+        function computerPlay() {
+            let randomNum = Math.floor(Math.random()*3);
+            return words[randomNum];
+        }
+
+        function playRound(playerSelection, computerSelection) {
+            if (playerSelection === "Rock" && computerSelection === "Paper") {
+                computerWin++;
+                return "You Lose! Paper beats Rock";
+            } else if (playerSelection === "Rock" && computerSelection === "Scissors") {
+                playerWin++;
+                return "You Win! Rock beats scissors";
+            } else if (playerSelection === "Rock" && computerSelection === "Rock") {
+                return "Draw! Play again";
+            } else if (playerSelection === "Paper" && computerSelection === "Paper") {
+                return "Draw! Play again";
+            } else if (playerSelection === "Paper" && computerSelection === "Scissors") {
+                computerWin++;
+                return "You Lose! Scissors beats Paper";
+            } else if (playerSelection === "Paper" && computerSelection === "Rock") {
+                playerWin++;
+                return "You Win! Paper beats Rock";
+            } else if (playerSelection === "Scissors" && computerSelection === "Paper") {
+                playerWin++;
+                return "You Win! Scissors beats Paper";
+            } else if (playerSelection === "Scissors" && computerSelection === "Scissors") {
+                return "Draw! Play again";
+            } else if (playerSelection === "Scissors" && computerSelection === "Rock") {
+                computerWin++;
+                return "You Lose! Rock beats Scissors";
+            }
+
+        }
+
+        function game() {
+            for (let i = 0; i < 5; i++) {
+                let playerSelection = prompt("Please select Rock, Paper or Scissors to begin");
+                const computerSelection = computerPlay()
+                console.log("Player has chosen: " + playerSelection);
+                console.log("Computer has chosen: " + computerSelection);
+                console.log(playRound(playerSelection, computerSelection));
+            }
+            if (playerWin > computerWin) {
+                return "Congratulations! You won the game"
+            } else if (playerWin === computerWin) {
+                return "It was a draw!"
+            } else {
+                return "Unlucky! Maybe you should try using the deeze strategy next time"
+            }
+            console.log("The computer won: " + computerWin);
+            console.log("You won: " + playerWin);
+        }
+
+        console.log(game());
+        
+
+    </script>
+
+    
+</body>
+</html>
