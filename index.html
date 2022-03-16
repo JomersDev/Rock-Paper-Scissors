@@ -4,72 +4,133 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Document</title>
 </head>
 <body>
-    <script>
-        let words = ["Rock", "Paper", "Scissors"];
-        let playerWin = 0;
-        let computerWin = 0;
-
-        function computerPlay() {
-            let randomNum = Math.floor(Math.random()*3);
-            return words[randomNum];
-        }
-
-        function playRound(playerSelection, computerSelection) {
-            if (playerSelection === "Rock" && computerSelection === "Paper") {
-                computerWin++;
-                return "You Lose! Paper beats Rock";
-            } else if (playerSelection === "Rock" && computerSelection === "Scissors") {
-                playerWin++;
-                return "You Win! Rock beats scissors";
-            } else if (playerSelection === "Rock" && computerSelection === "Rock") {
-                return "Draw! Play again";
-            } else if (playerSelection === "Paper" && computerSelection === "Paper") {
-                return "Draw! Play again";
-            } else if (playerSelection === "Paper" && computerSelection === "Scissors") {
-                computerWin++;
-                return "You Lose! Scissors beats Paper";
-            } else if (playerSelection === "Paper" && computerSelection === "Rock") {
-                playerWin++;
-                return "You Win! Paper beats Rock";
-            } else if (playerSelection === "Scissors" && computerSelection === "Paper") {
-                playerWin++;
-                return "You Win! Scissors beats Paper";
-            } else if (playerSelection === "Scissors" && computerSelection === "Scissors") {
-                return "Draw! Play again";
-            } else if (playerSelection === "Scissors" && computerSelection === "Rock") {
-                computerWin++;
-                return "You Lose! Rock beats Scissors";
-            }
-
-        }
-
-        function game() {
-            for (let i = 0; i < 5; i++) {
-                let playerSelection = prompt("Please select Rock, Paper or Scissors to begin");
-                const computerSelection = computerPlay()
-                console.log("Player has chosen: " + playerSelection);
-                console.log("Computer has chosen: " + computerSelection);
-                console.log(playRound(playerSelection, computerSelection));
-            }
-            if (playerWin > computerWin) {
-                return "Congratulations! You won the game"
-            } else if (playerWin === computerWin) {
-                return "It was a draw!"
-            } else {
-                return "Unlucky! Maybe you should try using the deeze strategy next time"
-            }
-            console.log("The computer won: " + computerWin);
-            console.log("You won: " + playerWin);
-        }
-
-        console.log(game());
-        
-
-    </script>
-
+    <div id="container">
+        <h1>Rock, Paper, Scissors</h1>
+        <p>Play against the computer, Best of 5</p>
+        <p>Make your selection below to begin the game</p>
+        <div class="button-container">
+            <button class="button" id="Rock">Rock</button>
+            <button class="button" id="Paper">Paper</button>
+            <button class="button" id="Scissors">Scissors</button>
+        </div>
+    </div>
     
 </body>
+
+<script>
+
+let words = ["Rock", "Paper", "Scissors"];
+let playerWin = 0;
+let computerWin = 0;
+let gameWinner = "";
+
+
+//Generate a random number between 0-2 and return the associated word
+function computerPlay() {
+    let randomNum = Math.floor(Math.random()*3);
+    return words[randomNum];
+}
+
+// the game start
+function game() {
+
+    // add event listeners to all buttons
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+            playerSelection = button.id;
+            const computerSelection = computerPlay();
+            battleWinText.textContent = (playRound(playerSelection, computerSelection));
+            playerWinText.textContent = "Player Win totals: " + playerWin;
+            computerWinText.textContent = "Computer Win Totals: " + computerWin;
+            endGame();
+        })
+    })   
+    
+    //play the round and determine winner
+    function playRound(playerSelection, computerSelection) {
+        let tie = "Tie, you selected " + playerSelection + " and the computer selected " + computerSelection;
+        let paperBeatRock = "You Win!, you selected " + playerSelection + " and the computer selected " + computerSelection;
+        let scissorsBeatPaperLoss = "You Lose!, you selected " + playerSelection + " and the computer selected " + computerSelection;
+        let paperBeatRockLoss = "You Lose!, you selected " + playerSelection + " and the computer selected " + computerSelection;
+        let rockBeatScissors = "You Win!, you selected " + playerSelection + " and the computer selected " + computerSelection;
+        let rockBeatScissorsLoss = "You Lose!, you selected " + playerSelection + " and the computer selected " + computerSelection;
+        let scissorsBeatPaper = "You Win!, you selected " + playerSelection + " and the computer selected " + computerSelection;
+
+        if (playerSelection === computerSelection) {
+            return tie;
+        } else if ((playerSelection === "Paper") && (computerSelection === "Rock")) {
+            playerWin++;
+            return paperBeatRock;
+        } else if ((playerSelection === "Paper") && (computerSelection === "Scissors")) {
+            computerWin++;
+            return scissorsBeatPaperLoss;
+        } else if ((playerSelection === "Rock") && (computerSelection === "Paper")) {
+            computerWin++;
+            return paperBeatRockLoss;
+        } else if ((playerSelection === "Rock") && (computerSelection === "Scissors")) {
+            playerWin++;
+            return rockBeatScissors;
+        } else if ((playerSelection === "Scissors") && (computerSelection === "Rock")) {
+            computerWin++;
+            return rockBeatScissorsLoss;
+        } else {
+            playerWin++;
+            return scissorsBeatPaper;
+        }
+    
+        
+        
+    }
+    
+}
+
+
+// create div DOM for all results
+const container = document.querySelector("#container");
+const resultsDiv = document.createElement("div");
+resultsDiv.style.marginTop = "20px";
+container.appendChild(resultsDiv);
+
+// create player win tracking DOM
+const playerWinText = document.createElement("p");
+playerWinText.style.color = "blue";
+playerWinText.textContent = "Player Win Totals: " + playerWin;
+resultsDiv.appendChild(playerWinText);
+
+// create computer win tracking DOM
+const computerWinText = document.createElement("p");
+computerWinText.style.color = "blue";
+computerWinText.textContent = "Computer Win Totals: " + computerWin;
+resultsDiv.appendChild(computerWinText);
+
+//create battle win text DOM
+const battleWinText = document.createElement("p");
+battleWinText.style.color = "black";
+resultsDiv.appendChild(battleWinText);
+
+// create game win text DOM
+const gameWinText = document.createElement("p");
+gameWinText.style.color = "orange";
+gameWinText.textContent = gameWinner;
+resultsDiv.appendChild(gameWinText);
+
+// determine who won to five points first
+function endGame() {
+    if (playerWin == 5) {
+        gameWinner = "YOU WIN!";
+        gameWinText.textContent = gameWinner;
+    } else if (computerWin == 5) {
+        gameWinner = "COMPUTER WINS!";
+        gameWinText.textContent = gameWinner;
+    }
+}
+//start the game
+game();
+
+</script>
 </html>
